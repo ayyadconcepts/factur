@@ -20,6 +20,7 @@ export interface VerifiedField {
 export interface VerificationResult {
   globalStatus: 'success' | 'warning' | 'error';
   fields: Record<string, VerifiedField>;
+  data?: LlmInvoiceDraft;
 }
 
 function normalizeText(text: any): string {

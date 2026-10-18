@@ -132,7 +132,9 @@ export default function AILoadingState() {
     }
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
+      ([entry]) => {
+        if (entry) setIsVisible(entry.isIntersecting);
+      },
       { rootMargin: "100px" }
     );
     observer.observe(element);
@@ -140,14 +142,14 @@ export default function AILoadingState() {
     return () => observer.disconnect();
   }, []);
 
-  const currentSequence = TASK_SEQUENCES[sequenceIndex];
+  const currentSequence = TASK_SEQUENCES[sequenceIndex] ?? TASK_SEQUENCES[0]!;
   const totalLines = currentSequence.lines.length;
 
   useEffect(() => {
     const initialLines = [];
     for (let i = 0; i < Math.min(5, totalLines); i++) {
       initialLines.push({
-        text: currentSequence.lines[i],
+        text: currentSequence.lines[i] ?? "",
         number: i + 1,
       });
     }
@@ -187,7 +189,7 @@ export default function AILoadingState() {
         setVisibleLines((prevLines) => [
           ...prevLines,
           {
-            text: currentSequence.lines[nextLineIndex],
+            text: currentSequence.lines[nextLineIndex] ?? "",
             number: nextLineIndex + 1,
           },
         ]);

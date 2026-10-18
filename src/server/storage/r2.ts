@@ -44,7 +44,7 @@ export class R2Store implements FileStore {
       try {
         const response = await aws.fetch(url, {
           method: 'PUT',
-          body: buffer,
+          body: new Uint8Array(buffer),
           headers,
         });
 

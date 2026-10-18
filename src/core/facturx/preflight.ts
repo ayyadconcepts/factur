@@ -29,15 +29,15 @@ export async function checkPreflight(pdfBytes: Uint8Array): Promise<PDFDocument>
   // Check for JavaScript (Names -> JavaScript or OpenAction with JS)
   const catalog = doc.catalog;
   const names = catalog.lookupMaybe(PDFName.of('Names'), PDFDict);
-  if (names && names.lookupMaybe(PDFName.of('JavaScript'))) {
+  if (names && names.has(PDFName.of('JavaScript'))) {
     throw new PreflightError("Le PDF contient du code JavaScript interdit.");
   }
   
   // Also check OpenAction just in case
-  const openAction = catalog.lookupMaybe(PDFName.of('OpenAction'));
-  if (openAction instanceof PDFDict) {
+  const openAction = catalog.lookupMaybe(PDFName.of('OpenAction'), PDFDict);
+  if (openAction) {
     const s = openAction.lookupMaybe(PDFName.of('S'), PDFName);
-    if (s === PDFName.of('JavaScript')) {
+    if (s?.asString() === '/JavaScript') {
       throw new PreflightError("Le PDF contient une action d'ouverture JavaScript.");
     }
   }

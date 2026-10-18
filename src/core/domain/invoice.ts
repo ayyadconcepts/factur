@@ -1,5 +1,9 @@
 export type Amount = string;
+export type Decimal4 = string;
 export type IsoDate = string;
+export type FacturXProfile = 'MINIMUM' | 'BASIC WL' | 'BASIC' | 'EN16931' | 'EXTENDED';
+export type VatCategoryCode = 'S' | 'Z' | 'E' | 'AE' | 'K' | 'G' | 'O';
+export type UnitCode = string;
 
 export interface Address {
   line1: string;
@@ -25,7 +29,7 @@ export interface InvoiceLine {
   unit: string;  // unité UN/ECE (ex. "C62")
   unitPriceNet: Amount;
   lineNetAmount: Amount;
-  vat: { category: 'S' | 'Z' | 'E'; percent: string };       // MVP : S, Z, E
+  vat: { category: 'S' | 'Z' | 'E'; percent: string; exemptionReason?: string };       // MVP : S, Z, E
 }
 
 export interface VatBreakdownLine {
@@ -36,8 +40,20 @@ export interface VatBreakdownLine {
   exemptionReason?: string;
 }
 
+export interface InvoiceTotals {
+  lineNet: Amount;
+  taxExclusive: Amount;
+  taxTotal: Amount;
+  taxInclusive: Amount;
+  payable: Amount;
+  lineNetTotal?: Amount;
+  taxExclusiveTotal?: Amount;
+  taxInclusiveTotal?: Amount;
+  prepaid?: Amount;
+}
+
 export interface Invoice {
-  profile: 'EN16931';
+  profile: 'EN16931' | FacturXProfile;
   number: string;
   typeCode: '380' | '381';
   issueDate: IsoDate;
@@ -48,9 +64,10 @@ export interface Invoice {
   buyer: Party;
   lines: InvoiceLine[];                       // au moins 1
   vatBreakdown: VatBreakdownLine[];           // au moins 1
-  totals: { lineNet: Amount; taxExclusive: Amount; taxTotal: Amount; taxInclusive: Amount; payable: Amount };
+  totals: InvoiceTotals;
   payment: { meansCode?: string; iban?: string; bic?: string; terms?: string };
   operationCategory?: 'goods' | 'services' | 'mixed';   // nature de l'opération (mention obligatoire en 2026)
   vatOnDebits?: boolean;                                 // option TVA sur les débits ; false = TVA sur les encaissements
   notes: { subjectCode?: string; content: string }[];    // mentions légales (pénalités, indemnité de 40 €, escompte…)
+  precedingInvoiceNumber?: string;
 }

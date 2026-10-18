@@ -134,10 +134,10 @@ function validateParty(party: Party, role: 'seller' | 'buyer'): readonly Validat
   }
 
   // Electronic address (obligatoire en France)
-  if (!party.electronicAddress.value.trim()) {
+  if (!party.electronicAddress?.value?.trim()) {
     issues.push(issue('MISSING_ELECTRONIC_ADDRESS', 'error', `${prefix}.electronicAddress.value`, `L'adresse électronique du ${label} est obligatoire pour la facturation électronique française.`));
   }
-  if (!party.electronicAddress.schemeId.trim()) {
+  if (!party.electronicAddress?.schemeId?.trim()) {
     issues.push(issue('MISSING_ELECTRONIC_ADDRESS_SCHEME', 'error', `${prefix}.electronicAddress.schemeId`, `Le schéma d'identification de l'adresse électronique du ${label} est obligatoire.`));
   }
 
@@ -262,7 +262,7 @@ function validateVatRates(invoice: Invoice): readonly ValidationIssue[] {
 function validatePayment(invoice: Invoice): readonly ValidationIssue[] {
   const issues: ValidationIssue[] = [];
 
-  if (!invoice.payment.meansCode.trim()) {
+  if (!invoice.payment?.meansCode?.trim()) {
     issues.push(issue(
       'MISSING_PAYMENT_MEANS',
       'error',

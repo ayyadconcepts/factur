@@ -78,16 +78,24 @@ export function validateVatBreakdown(invoice: Invoice): readonly ValidationIssue
 export function validateTotals(invoice: Invoice): readonly ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const t = invoice.totals;
+  const lineNet = t.lineNet ?? t.lineNetTotal ?? '0.00';
+  const taxExclusive = t.taxExclusive ?? t.taxExclusiveTotal ?? '0.00';
+  const taxInclusive = t.taxInclusive ?? t.taxInclusiveTotal ?? '0.00';
+  const prepaid = t.prepaid ?? '0.00';
+
+  const lineNetPath = t.lineNet !== undefined ? 'totals.lineNet' : 'totals.lineNetTotal';
+  const taxExclusivePath = t.taxExclusive !== undefined ? 'totals.taxExclusive' : 'totals.taxExclusiveTotal';
+  const taxInclusivePath = t.taxInclusive !== undefined ? 'totals.taxInclusive' : 'totals.taxInclusiveTotal';
 
   // BR-CO-10: lineNetTotal = sum of line lineNetAmounts
   const computedLineNetTotal = sumAmounts(invoice.lines.map(l => l.lineNetAmount));
-  if (computedLineNetTotal !== t.lineNetTotal) {
-    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', 'totals.lineNetTotal', `Total net des lignes incorrect (calculé: ${computedLineNetTotal}, déclaré: ${t.lineNetTotal})`, 'BR-CO-10'));
+  if (computedLineNetTotal !== lineNet) {
+    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', lineNetPath, `Total net des lignes incorrect (calculé: ${computedLineNetTotal}, déclaré: ${lineNet})`, 'BR-CO-10'));
   }
 
   // BR-CO-11: taxExclusiveTotal = lineNetTotal (no allowances/charges MVP)
-  if (computedLineNetTotal !== t.taxExclusiveTotal) {
-    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', 'totals.taxExclusiveTotal', `Total HT incorrect (calculé: ${computedLineNetTotal}, déclaré: ${t.taxExclusiveTotal})`, 'BR-CO-11'));
+  if (computedLineNetTotal !== taxExclusive) {
+    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', taxExclusivePath, `Total HT incorrect (calculé: ${computedLineNetTotal}, déclaré: ${taxExclusive})`, 'BR-CO-11'));
   }
 
   // BR-CO-15: taxTotal = sum of vatBreakdown taxAmounts
@@ -97,20 +105,20 @@ export function validateTotals(invoice: Invoice): readonly ValidationIssue[] {
   }
 
   // BR-CO-16: taxInclusiveTotal = taxExclusiveTotal + taxTotal
-  const computedTaxInclusiveTotal = toAmount(asDecimal(t.taxExclusiveTotal).plus(asDecimal(t.taxTotal)));
-  if (computedTaxInclusiveTotal !== t.taxInclusiveTotal) {
-    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', 'totals.taxInclusiveTotal', `Total TTC incorrect (calculé: ${computedTaxInclusiveTotal}, déclaré: ${t.taxInclusiveTotal})`, 'BR-CO-16'));
+  const computedTaxInclusiveTotal = toAmount(asDecimal(taxExclusive).plus(asDecimal(t.taxTotal)));
+  if (computedTaxInclusiveTotal !== taxInclusive) {
+    issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', taxInclusivePath, `Total TTC incorrect (calculé: ${computedTaxInclusiveTotal}, déclaré: ${taxInclusive})`, 'BR-CO-16'));
   }
 
   // Cross-check: taxInclusiveTotal - taxExclusiveTotal must equal taxTotal (CONTROL)
-  const difference = toAmount(asDecimal(t.taxInclusiveTotal).minus(asDecimal(t.taxExclusiveTotal)));
+  const difference = toAmount(asDecimal(taxInclusive).minus(asDecimal(taxExclusive)));
   if (difference !== t.taxTotal) {
     issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', 'totals', `Cohérence TTC-HT != TVA (calculé: ${difference}, déclaré TVA: ${t.taxTotal})`));
   }
 
   // BR-CO-16: payable = taxInclusiveTotal - prepaid (in EN16931 this is actually BR-CO-16 too or related)
   // Let's check BR-CO-16 payable
-  const computedPayable = toAmount(asDecimal(t.taxInclusiveTotal).minus(asDecimal(t.prepaid)));
+  const computedPayable = toAmount(asDecimal(taxInclusive).minus(asDecimal(prepaid)));
   if (computedPayable !== t.payable) {
     issues.push(issue('ARITH_TOTAL_MISMATCH', 'error', 'totals.payable', `Net à payer incorrect (calculé: ${computedPayable}, déclaré: ${t.payable})`, 'BR-CO-16'));
   }

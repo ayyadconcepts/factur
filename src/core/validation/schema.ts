@@ -3,6 +3,8 @@ import type { Invoice } from '../domain/invoice';
 import type { ValidationIssue } from './types';
 import { validateSiren, validateSiret, validateVatIdFR, validateIban } from './identifiers';
 
+export type InvoiceData = Invoice;
+
 export const AmountSchema = z.string().regex(/^-?\d+\.\d{2}$/, { message: "Le montant doit avoir exactement 2 décimales (ex: 1200.00)" });
 export const IsoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Date ISO requise (YYYY-MM-DD)" });
 

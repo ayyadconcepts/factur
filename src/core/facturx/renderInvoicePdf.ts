@@ -145,7 +145,7 @@ export async function renderInvoicePdf(
   let mentions = [];
   if (invoice.operationCategory === 'services') mentions.push('Nature : Prestation de services');
   else if (invoice.operationCategory === 'goods') mentions.push('Nature : Livraison de biens');
-  else if (invoice.operationCategory === 'both') mentions.push('Nature : Mixte');
+  else if (invoice.operationCategory === 'mixed') mentions.push('Nature : Mixte');
 
   if (invoice.vatOnDebits === true) mentions.push('TVA acquittée sur les débits');
   else if (invoice.vatOnDebits === false) mentions.push('TVA acquittée sur les encaissements');

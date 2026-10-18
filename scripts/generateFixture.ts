@@ -45,12 +45,15 @@ async function run() {
       { category: 'S' as any, percent: toDecimal4('20'), taxableAmount: toAmount('100'), taxAmount: toAmount('20') }
     ],
     totals: {
+      lineNet: toAmount('100'),
+      taxExclusive: toAmount('100'),
+      taxTotal: toAmount('20'),
+      taxInclusive: toAmount('120'),
+      payable: toAmount('120'),
       lineNetTotal: toAmount('100'),
       taxExclusiveTotal: toAmount('100'),
-      taxTotal: toAmount('20'),
       taxInclusiveTotal: toAmount('120'),
       prepaid: ZERO_AMOUNT,
-      payable: toAmount('120')
     },
     payment: {
       meansCode: '30',

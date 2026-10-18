@@ -57,7 +57,7 @@ export function InvoiceEditor({ file, onInvoiceGenerated, initialData }: { file:
     if (safeVal('currency')) newValues.currency = safeVal('currency');
     if (safeVal('operationCategory')) newValues.operationCategory = safeVal('operationCategory');
     if (f['vatOnDebits']?.value !== undefined && f['vatOnDebits']?.value !== null) {
-      newValues.vatOnDebits = f['vatOnDebits'].value === 'true' || f['vatOnDebits'].value === true;
+      newValues.vatOnDebits = f['vatOnDebits'].value === 'true' || (f['vatOnDebits'].value as unknown) === true;
     }
 
     if (safeVal('seller.name')) newValues.seller.name = safeVal('seller.name');

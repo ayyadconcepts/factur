@@ -19,7 +19,6 @@ export default function Features() {
                     <div className="mt-12 grid gap-12 sm:grid-cols-2">
                         <div className="col-span-full space-y-4">
                             <Card
-                                variant="soft"
                                 className="overflow-hidden px-6 sm:col-span-2"
                             >
                                 <div className="mask-b-from-75% mx-auto -mt-2 max-w-sm px-2 pt-8">
@@ -33,7 +32,6 @@ export default function Features() {
                         </div>
                         <div className="grid grid-rows-[1fr_auto] space-y-4">
                             <Card
-                                variant="soft"
                                 className="p-6"
                             >
                                 <MeetingIllustration />
@@ -46,7 +44,6 @@ export default function Features() {
 
                         <div className="grid grid-rows-[1fr_auto] space-y-4">
                             <Card
-                                variant="soft"
                                 className="overflow-hidden p-6"
                             >
                                 <CodeReviewIllustration />

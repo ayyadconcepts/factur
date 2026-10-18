@@ -80,7 +80,7 @@ export function usePdfExtraction(file: File | null, initialData?: any) {
           console.log("[usePdfExtraction] Reading file as base64...");
           const reader = new FileReader();
           const base64Promise = new Promise<string>((resolve) => {
-            reader.onload = () => resolve((reader.result as string).split(',')[1]);
+            reader.onload = () => resolve((reader.result as string).split(',')[1] ?? '');
             reader.readAsDataURL(file!);
           });
           const base64 = await base64Promise;

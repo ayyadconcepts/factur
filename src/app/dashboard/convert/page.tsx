@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { UploadCloud, FileText, CheckCircle2, AlertCircle, Loader2, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
@@ -229,11 +229,14 @@ export default function ConvertPage() {
                           />
                         </TableCell>
                         <TableCell>
-                          <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                            <a href={`/api/invoices/${item.id}/pdf`} download={`${item.number}-facturx.pdf`} title="Télécharger la facture">
-                              <Download className="w-4 h-4" />
-                            </a>
-                          </Button>
+                          <a 
+                            href={`/api/invoices/${item.id}/pdf`} 
+                            download={`${item.number}-facturx.pdf`} 
+                            title="Télécharger la facture"
+                            className={buttonVariants({ variant: "ghost", size: "icon", className: "h-8 w-8 text-muted-foreground hover:text-foreground inline-flex items-center justify-center" })}
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
                         </TableCell>
                       </TableRow>
                     ))}

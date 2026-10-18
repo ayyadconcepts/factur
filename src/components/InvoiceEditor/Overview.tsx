@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { CheckCircle2, AlertCircle, Edit2, Download, Building2, User, FileText, Euro, Calendar } from 'lucide-react';
-import type { InvoiceData } from '@/core/validation/schema';
+import type { Invoice } from '@/core/domain/invoice';
 
 interface OverviewProps {
   extractionResult: any;
   onEdit: () => void;
   file: File | null;
-  onSuccess?: () => void;
+  onSuccess?: (() => void) | undefined;
 }
 
 export function Overview({ extractionResult, onEdit, file, onSuccess }: OverviewProps) {
@@ -31,7 +31,7 @@ export function Overview({ extractionResult, onEdit, file, onSuccess }: Overview
     try {
       const reader = new FileReader();
       const base64Promise = new Promise<string>((resolve) => {
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onload = () => resolve((reader.result as string).split(',')[1] ?? '');
         reader.readAsDataURL(file);
       });
       const base64 = await base64Promise;

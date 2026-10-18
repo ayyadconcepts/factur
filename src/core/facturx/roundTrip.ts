@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, AFRelationship } from 'pdf-lib';
 import type { Invoice } from '../domain/invoice';
 import { toCii } from './toCii';
 import { renderInvoicePdf } from './renderInvoicePdf';
@@ -8,10 +8,10 @@ import { engine } from './engine';
 export interface GenerateFacturxOptions {
   invoice: Invoice;
   /** Custom PDF if mode is FIDÈLE. If not provided, it will generate a visual (GARANTI) */
-  sourcePdfBytes?: Uint8Array;
+  sourcePdfBytes?: Uint8Array | undefined;
   iccProfileBytes: Uint8Array;
-  fontBytes?: Uint8Array;
-  boldFontBytes?: Uint8Array;
+  fontBytes?: Uint8Array | undefined;
+  boldFontBytes?: Uint8Array | undefined;
 }
 
 export interface GenerateFacturxResult {
@@ -86,7 +86,7 @@ export async function generateFacturxDocument(options: GenerateFacturxOptions): 
         description: 'Factur-X XML',
         creationDate: new Date(),
         modificationDate: new Date(),
-        afRelationship: 'Data'
+        afRelationship: AFRelationship.Data
       });
       finalPdfBytes = await fallbackDoc.save();
     } else {

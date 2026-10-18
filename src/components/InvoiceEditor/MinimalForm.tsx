@@ -25,7 +25,9 @@ const MinimalInput = ({ label, name, register, errors }: { label: string, name: 
             placeholder={`Saisir ${label.toLowerCase()}...`}
           />
           {error ? (
-            <XCircle className="w-4 h-4 text-red-500 shrink-0" title={error.message} />
+            <span title={error.message} className="shrink-0">
+              <XCircle className="w-4 h-4 text-red-500" />
+            </span>
           ) : (
             <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
           )}
@@ -41,7 +43,7 @@ export function MinimalForm({ extractedData, file, onCancel }: MinimalFormProps)
   
   const { register, handleSubmit, reset, trigger, formState: { errors } } = useForm<any>({
     mode: 'all',
-    resolver: zodResolver(InvoiceSchema),
+    resolver: zodResolver(InvoiceSchema as any),
     defaultValues: extractedData?.data || {}
   });
 
@@ -62,7 +64,7 @@ export function MinimalForm({ extractedData, file, onCancel }: MinimalFormProps)
     try {
       const reader = new FileReader();
       const base64Promise = new Promise<string>((resolve) => {
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onload = () => resolve((reader.result as string).split(',')[1] ?? '');
         reader.readAsDataURL(file);
       });
       const base64 = await base64Promise;
