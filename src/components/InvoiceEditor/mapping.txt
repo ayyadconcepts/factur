@@ -1,0 +1,83 @@
+      const f = extractedData.fields;
+      
+      const newValues: any = {};
+      
+      const safeVal = (key: string) => f[key]?.value;
+      const safeAmount = (key: string) => f[key]?.value || '0.00';
+
+      if (safeVal('invoiceNumber')) newValues.number = safeVal('invoiceNumber');
+      if (safeVal('issueDate')) newValues.issueDate = safeVal('issueDate');
+      if (safeVal('dueDate')) newValues.dueDate = safeVal('dueDate');
+      if (safeVal('deliveryDate')) newValues.deliveryDate = safeVal('deliveryDate');
+      if (safeVal('currency')) newValues.currency = safeVal('currency');
+      if (safeVal('operationCategory')) newValues.operationCategory = safeVal('operationCategory');
+      if (f['vatOnDebits']?.value !== undefined && f['vatOnDebits']?.value !== null) {
+        newValues.vatOnDebits = f['vatOnDebits'].value === 'true' || f['vatOnDebits'].value === true;
+      }
+
+      newValues.seller = { ...newValues.seller };
+      if (safeVal('seller.name')) newValues.seller.name = safeVal('seller.name');
+      if (safeVal('seller.siren')) newValues.seller.siren = safeVal('seller.siren');
+      if (safeVal('seller.siret')) newValues.seller.siret = safeVal('seller.siret');
+      if (safeVal('seller.vatId')) newValues.seller.vatId = safeVal('seller.vatId');
+      
+      newValues.seller.address = { ...newValues.seller?.address };
+      if (safeVal('seller.addressLine1')) newValues.seller.address.line1 = safeVal('seller.addressLine1');
+      if (safeVal('seller.postalCode')) newValues.seller.address.postalCode = safeVal('seller.postalCode');
+      if (safeVal('seller.city')) newValues.seller.address.city = safeVal('seller.city');
+      newValues.seller.address.country = 'FR';
+
+      newValues.buyer = { ...newValues.buyer };
+      if (safeVal('buyer.name')) newValues.buyer.name = safeVal('buyer.name');
+      if (safeVal('buyer.siren')) newValues.buyer.siren = safeVal('buyer.siren');
+      if (safeVal('buyer.siret')) newValues.buyer.siret = safeVal('buyer.siret');
+      if (safeVal('buyer.vatId')) newValues.buyer.vatId = safeVal('buyer.vatId');
+      
+      newValues.buyer.address = { ...newValues.buyer?.address };
+      if (safeVal('buyer.addressLine1')) newValues.buyer.address.line1 = safeVal('buyer.addressLine1');
+      if (safeVal('buyer.postalCode')) newValues.buyer.address.postalCode = safeVal('buyer.postalCode');
+      if (safeVal('buyer.city')) newValues.buyer.address.city = safeVal('buyer.city');
+      newValues.buyer.address.country = 'FR';
+
+      // Totals
+      const htVal = safeAmount('totals.excludingVat');
+      const ttcVal = safeAmount('totals.includingVat');
+      newValues.totals = {
+        lineNet: htVal,
+        taxExclusive: htVal,
+        taxTotal: safeAmount('totals.vatTotal'),
+        taxInclusive: ttcVal,
+        payable: ttcVal,
+      };
+
+      // Payment
+      newValues.payment = { ...newValues.payment };
+      if (safeVal('payment.iban')) newValues.payment.iban = safeVal('payment.iban');
+      if (safeVal('payment.bic')) newValues.payment.bic = safeVal('payment.bic');
+      if (safeVal('payment.terms')) newValues.payment.terms = safeVal('payment.terms');
+
+      // Arrays (lines, vatBreakdown, notes) requires looking at indices
+      const lines = [];
+      let i = 0;
+      while (f[`lines.${i}.description`]) {
+        lines.push({
+          id: String(i + 1),
+          name: safeVal(`lines.${i}.description`) || '',
+          quantity: safeVal(`lines.${i}.quantity`) || '1',
+          unit: safeVal(`lines.${i}.unit`) || 'C62',
+          unitPriceNet: safeAmount(`lines.${i}.unitPriceNet`),
+          lineNetAmount: safeAmount(`lines.${i}.lineNetAmount`),
+          vat: {
+            category: safeVal(`lines.${i}.vatCategory`) || 'S',
+            percent: safeVal(`lines.${i}.vatRate`) || '20.00'
+          }
+        });
+        i++;
+      }
+      if (lines.length > 0) newValues.lines = lines;
+
+      const vats = [];
+      let j = 0;
+      while (f[`vatBreakdown.${j}.rate`]) {
+        vats.push({
+          category: safeVal(`vatBreakdown.${j}.category`) || 'S',

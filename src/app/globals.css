@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  --font-heading: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  --color-sage-50: #e6f8f2;
+  --color-sage-100: #c1efe0;
+  --color-sage-200: #8ce3c8;
+  --color-sage-300: #4ed2ab;
+  --color-sage-400: #1ec195;
+  --color-sage-500: #02b282;
+  --color-sage-600: #01946c;
+  --color-sage-700: #027557;
+  --color-sage-800: #045d46;
+  --color-sage-900: #054c3a;
+  --color-sage-950: #012b21;
+
+  --color-background: #f4f0ea;
+  --color-foreground: #141312;
+
+  --color-card: #f4f0ea;
+  --color-card-foreground: #141312;
+
+  --color-popover: #f4f0ea;
+  --color-popover-foreground: #141312;
+
+  --color-cream-light: #fbf9f5;
+  --color-cream-base: #f4f0ea;
+  --color-cream-dark: #eae4da;
+  --color-cream-darker: #e2ddd3;
+  --color-cream-50: #fbf9f5;
+  --color-cream-100: #f4f0ea;
+  --color-cream-200: #eae4da;
+  --color-cream-300: #e2ddd3;
+
+  --color-primary: var(--color-sage-500);
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #eae4da;
+  --color-secondary-foreground: #141312;
+
+  --color-muted: #eae4da;
+  --color-muted-foreground: #78736a;
+
+  --color-accent: #e2ddd3;
+  --color-accent-foreground: #141312;
+
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #e2ddd3;
+  --color-input: #e2ddd3;
+  --color-ring: var(--color-sage-500);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+}
+
+:root {
+  --radius: 0.625rem;
+  --sidebar: #ece7df;
+  --sidebar-foreground: #141312;
+  --sidebar-primary: #141312;
+  --sidebar-primary-foreground: #f4f0ea;
+  --sidebar-accent: #e0dbd1;
+  --sidebar-accent-foreground: #141312;
+  --sidebar-border: #e2ddd3;
+  --sidebar-ring: #02b282;
+}
+
+.dark {
+  --radius: 0.625rem;
+  --color-background: #141312;
+  --color-foreground: #f4f0ea;
+  --color-card: #1c1b18;
+  --color-card-foreground: #f4f0ea;
+  --color-popover: #1c1b18;
+  --color-popover-foreground: #f4f0ea;
+  --color-cream-light: #22201d;
+  --color-cream-base: #1c1b18;
+  --color-cream-dark: #171614;
+  --color-cream-darker: #131211;
+  --color-cream-50: #22201d;
+  --color-cream-100: #1c1b18;
+  --color-cream-200: #171614;
+  --color-cream-300: #131211;
+  --color-primary: var(--color-sage-500);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #272522;
+  --color-secondary-foreground: #f4f0ea;
+  --color-muted: #24221f;
+  --color-muted-foreground: #9a9488;
+  --color-accent: #2c2a26;
+  --color-accent-foreground: #f4f0ea;
+  --color-destructive: #ef4444;
+  --color-border: #2d2b27;
+  --color-input: #2d2b27;
+  --color-ring: var(--color-sage-500);
+  --sidebar: #191816;
+  --sidebar-foreground: #f4f0ea;
+  --sidebar-primary: #02b282;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #24221f;
+  --sidebar-accent-foreground: #f4f0ea;
+  --sidebar-border: #2d2b27;
+  --sidebar-ring: #02b282;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  }
+}
+
+@keyframes feralDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-1.5%, 1.2%, 0) scale(1.025) rotate(0.6deg);
+  }
+  100% {
+    transform: translate3d(1%, -1%, 0) scale(0.985) rotate(-0.5deg);
+  }
+}
+
+.animate-feral-drift {
+  animation: feralDrift 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-feral-drift {
+    animation: none !important;
+  }
+}

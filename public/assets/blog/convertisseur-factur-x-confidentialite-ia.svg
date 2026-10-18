@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- Paper texture grain simulation -->
+    <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.95   0 0 0 0 0.94   0 0 0 0 0.92   0 0 0 0.07 0" />
+      <feComposite in2="SourceGraphic" in="glitch" operator="in" />
+    </filter>
+  </defs>
+
+  <!-- Cream Paper Background -->
+  <rect width="1920" height="1080" fill="#f4f0ea" />
+
+  <!-- Subtle Paper Grain Overlay -->
+  <rect width="1920" height="1080" fill="#eae4da" opacity="0.35" />
+
+  <!-- LEFT TYPOGRAPHY COLUMN -->
+  <g transform="translate(120, 0)">
+    <!-- Category Eyebrow -->
+    <text x="0" y="160" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="28" 
+          font-weight="700" 
+          letter-spacing="4" 
+          fill="#78736a">
+      RESSOURCES · RÉFORME 2026
+    </text>
+
+    <!-- Main Title Lines -->
+    <text x="0" y="380" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      Convertisseur Factur-X
+    </text>
+    <text x="0" y="475" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      et IA : que deviennent
+    </text>
+    
+    <text x="0" y="570" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      vos factures ?
+    </text>
+
+    <!-- Thick Emerald Accent Bar -->
+    <rect x="0" y="630" width="650" height="28" rx="4" fill="#02b282" />
+
+    <!-- Subtitle -->
+    <text x="0" y="725" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="34" 
+          font-weight="400" 
+          letter-spacing="-0.5" 
+          fill="#141312">
+      Confidentialité RGPD, hébergement européen et garanties sur vos données
+    </text>
+
+    <!-- Brand / URL at bottom -->
+    <text x="0" y="940" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="40" 
+          font-weight="900" 
+          letter-spacing="-0.5" 
+          fill="#141312">
+      facturxfacile.com
+    </text>
+  </g>
+
+  <!-- RIGHT MINIMALIST RISOGRAPH ILLUSTRATION -->
+  
+      <!-- Privacy Shield / Vault -->
+      <g transform="translate(1350, 480)">
+        <!-- Pedestal base -->
+        <path d="M-240 280 L240 280 L280 360 L-280 360 Z" fill="#8cb39d" />
+        <rect x="-280" y="360" width="560" height="60" fill="#4a735c" />
+
+        <!-- Document inside vault -->
+        <rect x="-100" y="-120" width="200" height="280" rx="12" fill="#fbf9f5" stroke="#054c3a" stroke-width="8" />
+        <line x1="-70" y1="-60" x2="30" y2="-60" stroke="#054c3a" stroke-width="10" stroke-linecap="round" />
+        <line x1="-70" y1="-20" x2="70" y2="-20" stroke="#054c3a" stroke-width="10" stroke-linecap="round" />
+        <line x1="-70" y1="20" x2="70" y2="20" stroke="#054c3a" stroke-width="10" stroke-linecap="round" />
+        <line x1="-70" y1="60" x2="10" y2="60" stroke="#054c3a" stroke-width="10" stroke-linecap="round" />
+
+        <!-- Big Shield Overlay -->
+        <path d="M0 -220 L150 -150 C150 50 70 170 0 210 C-70 170 -150 50 -150 -150 Z" 
+              fill="#02b282" fill-opacity="0.85" stroke="#054c3a" stroke-width="10" />
+
+        <!-- Lock glyph inside shield -->
+        <rect x="-40" y="-30" width="80" height="70" rx="12" fill="#fbf9f5" />
+        <path d="M-24 -30 L-24 -65 C-24 -85 24 -85 24 -65 L24 -30" fill="none" stroke="#fbf9f5" stroke-width="12" stroke-linecap="round" />
+        <circle cx="0" cy="5" r="8" fill="#054c3a" />
+
+        <!-- EU Badge -->
+        <circle cx="160" cy="-140" r="45" fill="#e05656" />
+        <text x="160" y="-132" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">RGPD</text>
+        <text x="160" y="-112" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">100% UE</text>
+      </g>
+    
+</svg>

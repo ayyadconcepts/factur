@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.lcov
+
+# Next.js build output
+.next/
+out/
+
+# Production build
+build/
+dist/
+
+# Misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+
+# Large assets / installers / archives
+*.dmg
+*.zip
+*.tar.gz
+public/assets/*.dmg
+public/assets/*.zip
+public/assets/extracted_mesh/
+public/assets/mesh.old.jpg
+
+# Scratch & debug scripts
+test-*.ts
+test-*.js
+test-*.mjs
+test-*.cjs
+test.pdf
+dummy.pdf
+test-outputintent.pdf
+bisect-*.ts
+fix-*.js
+fix-*.ts
+debug-*.ts
+query-*.ts
+research-*.js
+flattenErrors.js
+list-models.js
+list_models.mjs
+update-*.js
+create-pdf.js
+components_temp.json
+
+# Environment variables
+.env*
+!.env.example
+
+# Vercel
+.vercel/

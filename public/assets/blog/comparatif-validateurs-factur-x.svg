@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- Paper texture grain simulation -->
+    <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.95   0 0 0 0 0.94   0 0 0 0 0.92   0 0 0 0.07 0" />
+      <feComposite in2="SourceGraphic" in="glitch" operator="in" />
+    </filter>
+  </defs>
+
+  <!-- Cream Paper Background -->
+  <rect width="1920" height="1080" fill="#f4f0ea" />
+
+  <!-- Subtle Paper Grain Overlay -->
+  <rect width="1920" height="1080" fill="#eae4da" opacity="0.35" />
+
+  <!-- LEFT TYPOGRAPHY COLUMN -->
+  <g transform="translate(120, 0)">
+    <!-- Category Eyebrow -->
+    <text x="0" y="160" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="28" 
+          font-weight="700" 
+          letter-spacing="4" 
+          fill="#78736a">
+      RESSOURCES · COMPARATIFS · 2026
+    </text>
+
+    <!-- Main Title Lines -->
+    <text x="0" y="380" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      Comparatif des
+    </text>
+    <text x="0" y="475" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      validateurs Factur-X
+    </text>
+    
+    <text x="0" y="570" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="82" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#141312">
+      en ligne (2026)
+    </text>
+
+    <!-- Thick Emerald Accent Bar -->
+    <rect x="0" y="630" width="650" height="28" rx="4" fill="#02b282" />
+
+    <!-- Subtitle -->
+    <text x="0" y="725" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="34" 
+          font-weight="400" 
+          letter-spacing="-0.5" 
+          fill="#141312">
+      Banc d’essai sur 6 fichiers de référence, règles BR-FR et sécurité
+    </text>
+
+    <!-- Brand / URL at bottom -->
+    <text x="0" y="940" 
+          font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" 
+          font-size="40" 
+          font-weight="900" 
+          letter-spacing="-0.5" 
+          fill="#141312">
+      facturxfacile.com
+    </text>
+  </g>
+
+  <!-- RIGHT MINIMALIST RISOGRAPH ILLUSTRATION -->
+  
+      <!-- Comparison Columns / Podium -->
+      <g transform="translate(1350, 520)">
+        <!-- Pedestal base -->
+        <path d="M-260 280 L260 280 L300 360 L-300 360 Z" fill="#8cb39d" />
+        <rect x="-300" y="360" width="600" height="60" fill="#4a735c" />
+
+        <!-- Column 1: XSD Seul -->
+        <rect x="-210" y="60" width="85" height="220" rx="6" fill="#b2d4c2" stroke="#054c3a" stroke-width="6" />
+        <text x="-167" y="160" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="20" font-weight="bold" fill="#054c3a" text-anchor="middle">XSD</text>
+
+        <!-- Column 2: veraPDF -->
+        <rect x="-105" y="-10" width="85" height="290" rx="6" fill="#8ce3c8" stroke="#054c3a" stroke-width="6" />
+        <text x="-62" y="100" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="18" font-weight="bold" fill="#054c3a" text-anchor="middle">PDF/A</text>
+
+        <!-- Column 3: FNFE-MPE -->
+        <rect x="0" y="-80" width="85" height="360" rx="6" fill="#1ec195" stroke="#054c3a" stroke-width="6" />
+        <text x="42" y="50" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#ffffff" text-anchor="middle">FNFE</text>
+
+        <!-- Column 4: Factur-X Facile (Winner) -->
+        <rect x="105" y="-170" width="105" height="450" rx="8" fill="#02b282" stroke="#054c3a" stroke-width="8" />
+        <circle cx="157" cy="-210" r="36" fill="#e05656" />
+        <path d="M142 -210 L153 -199 L175 -221" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+        <text x="157" y="-70" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">100%</text>
+        <text x="157" y="-40" font-family="'Helvetica Neue', Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CONFORME</text>
+
+        <!-- Star rays -->
+        <line x1="157" y1="-265" x2="157" y2="-250" stroke="#e05656" stroke-width="5" stroke-linecap="round" />
+        <line x1="195" y1="-245" x2="183" y2="-235" stroke="#e05656" stroke-width="5" stroke-linecap="round" />
+        <line x1="120" y1="-245" x2="132" y2="-235" stroke="#e05656" stroke-width="5" stroke-linecap="round" />
+      </g>
+    
+</svg>

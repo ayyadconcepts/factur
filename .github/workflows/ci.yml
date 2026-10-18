@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Check for native dependencies
+        run: npm ls 2>&1 | grep -i "native\|gyp\|node-pre-gyp\|prebuild" || echo "No native dependencies found"
+        
+      - name: Typecheck
+        run: npm run typecheck
+        
+      - name: Lint
+        run: npm run lint
+        
+      - name: Unit & Property Tests
+        run: npm run test:ci
+
+  # Phase 3+: pdfa-validation
+  # Phase 5+: e2e-tests
+
+  pdfa-validation:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate fixtures
+        run: npx tsx scripts/generateFixture.ts
+
+      - name: Validate PDF/A-3b with veraPDF
+        uses: verapdf/verapdf-action@v1
+        with:
+          profile: 3b
+          file: tests/fixtures/pdf/facture-simple.pdf
