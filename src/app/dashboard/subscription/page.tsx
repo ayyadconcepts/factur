@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PLANS, PlanId } from "@/config/plans";
 import { UserSubscriptionStatus } from "@/server/subscriptions/quota";
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-export default function SubscriptionPage() {
+function SubscriptionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [subscription, setSubscription] = useState<UserSubscriptionStatus | null>(null);
@@ -232,5 +232,19 @@ export default function SubscriptionPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SubscriptionPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-full items-center justify-center p-8">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        </div>
+      }
+    >
+      <SubscriptionContent />
+    </Suspense>
   );
 }

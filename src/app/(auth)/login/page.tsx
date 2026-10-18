@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { LoginForm } from '@/components/auth/LoginForm';
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function LoginPage() {
 
         <div className="flex flex-1 items-center justify-center py-8">
           <div className="w-full max-w-sm sm:max-w-md">
-            <LoginForm />
+            <Suspense fallback={<div className="h-48 flex items-center justify-center text-sm text-muted-foreground">Chargement...</div>}>
+              <LoginForm />
+            </Suspense>
           </div>
         </div>
 
