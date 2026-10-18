@@ -2,55 +2,77 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  let response = NextResponse.next({
     request,
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  // VERY IMPORTANT: You must call getUser() (not getSession) for authorization!
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   const url = request.nextUrl.clone()
+  const pathname = url.pathname
 
-  // Protect /dashboard and /api/companies routes
-  const isProtectedRoute = url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/api/companies');
+  const isProtectedRoute = pathname.startsWith('/dashboard') || pathname.startsWith('/api/companies')
+  const isAuthRoute = pathname === '/login' || pathname === '/signup'
 
-  if (isProtectedRoute && !user) {
-    url.pathname = '/login'
-    url.searchParams.set('next', request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // If Supabase environment variables are missing on the hosting platform,
+  // do not crash the public site. Only block protected routes.
+  if (!supabaseUrl || !supabaseAnonKey) {
+    if (isProtectedRoute) {
+      url.pathname = '/login'
+      url.searchParams.set('next', pathname)
+      return NextResponse.redirect(url)
+    }
+    return response
   }
 
-  // Prevent authenticated users from visiting auth pages
-  const isAuthRoute = url.pathname === '/login' || url.pathname === '/signup'
-  if (isAuthRoute && user) {
-    url.pathname = '/dashboard/convert'
-    return NextResponse.redirect(url)
+  try {
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            response = NextResponse.next({
+              request,
+            })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    // VERY IMPORTANT: You must call getUser() (not getSession) for authorization!
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (isProtectedRoute && !user) {
+      url.pathname = '/login'
+      url.searchParams.set('next', pathname)
+      return NextResponse.redirect(url)
+    }
+
+    if (isAuthRoute && user) {
+      url.pathname = '/dashboard/convert'
+      return NextResponse.redirect(url)
+    }
+  } catch (error) {
+    console.error('[Middleware] Supabase auth check error:', error)
+    if (isProtectedRoute) {
+      url.pathname = '/login'
+      url.searchParams.set('next', pathname)
+      return NextResponse.redirect(url)
+    }
   }
 
-  return supabaseResponse
+  return response
 }
 
 export const config = {
@@ -60,7 +82,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - sitemap.xml, robots.txt, static assets
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|xml|txt)$).*)',
   ],
 }
