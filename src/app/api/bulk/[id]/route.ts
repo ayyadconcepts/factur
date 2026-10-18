@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { createAdminClient } from '@/server/supabase/admin';
 import { r2Store } from '@/server/storage/r2';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

@@ -1,33 +1,32 @@
 import { AwsClient } from 'aws4fetch';
-import { z } from 'zod';
 import type { FileStore, FileStoreOptions } from './fileStore';
 
-const envSchema = z.object({
-  R2_ACCOUNT_ID: z.string().min(1),
-  R2_ACCESS_KEY_ID: z.string().min(1),
-  R2_SECRET_ACCESS_KEY: z.string().min(1),
-  R2_BUCKET: z.string().min(1)
-});
+let _client: { aws: AwsClient; endpoint: string; bucket: string } | null = null;
 
-const env = envSchema.parse({
-  R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
-  R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
-  R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
-  R2_BUCKET: process.env.R2_BUCKET
-});
+function getClient() {
+  if (!_client) {
+    const accountId = process.env.R2_ACCOUNT_ID || '';
+    const accessKeyId = process.env.R2_ACCESS_KEY_ID || '';
+    const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY || '';
+    const bucket = process.env.R2_BUCKET || '';
 
-const aws = new AwsClient({
-  accessKeyId: env.R2_ACCESS_KEY_ID,
-  secretAccessKey: env.R2_SECRET_ACCESS_KEY,
-  service: 's3',
-  region: 'auto'
-});
+    const aws = new AwsClient({
+      accessKeyId,
+      secretAccessKey,
+      service: 's3',
+      region: 'auto',
+    });
 
-const endpoint = `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
+    const endpoint = `https://${accountId}.r2.cloudflarestorage.com`;
+    _client = { aws, endpoint, bucket };
+  }
+  return _client;
+}
 
 export class R2Store implements FileStore {
   async put(key: string, bytes: Uint8Array, opts?: FileStoreOptions): Promise<void> {
-    const url = `${endpoint}/${env.R2_BUCKET}/${key}`;
+    const { aws, endpoint, bucket } = getClient();
+    const url = `${endpoint}/${bucket}/${key}`;
     const buffer = Buffer.isBuffer(bytes)
       ? bytes
       : Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength);
@@ -66,9 +65,10 @@ export class R2Store implements FileStore {
   }
 
   async get(key: string): Promise<Uint8Array> {
-    const url = `${endpoint}/${env.R2_BUCKET}/${key}`;
+    const { aws, endpoint, bucket } = getClient();
+    const url = `${endpoint}/${bucket}/${key}`;
     const response = await aws.fetch(url, {
-      method: 'GET'
+      method: 'GET',
     });
     if (!response.ok) {
       throw new Error(`Failed to get from R2: ${response.statusText}`);
@@ -77,9 +77,10 @@ export class R2Store implements FileStore {
   }
 
   async head(key: string): Promise<{ size: number; contentType?: string } | null> {
-    const url = `${endpoint}/${env.R2_BUCKET}/${key}`;
+    const { aws, endpoint, bucket } = getClient();
+    const url = `${endpoint}/${bucket}/${key}`;
     const response = await aws.fetch(url, {
-      method: 'HEAD'
+      method: 'HEAD',
     });
     if (!response.ok) {
       return null;
@@ -93,21 +94,23 @@ export class R2Store implements FileStore {
   }
 
   async getSignedUrl(key: string, ttlSeconds: number): Promise<string> {
-    const url = new URL(`${endpoint}/${env.R2_BUCKET}/${key}`);
+    const { aws, endpoint, bucket } = getClient();
+    const url = new URL(`${endpoint}/${bucket}/${key}`);
     url.searchParams.set('X-Amz-Expires', ttlSeconds.toString());
-    
+
     const request = await aws.sign(url.toString(), {
       method: 'GET',
-      aws: { signQuery: true }
+      aws: { signQuery: true },
     });
-    
+
     return request.url;
   }
 
   async delete(key: string): Promise<void> {
-    const url = `${endpoint}/${env.R2_BUCKET}/${key}`;
+    const { aws, endpoint, bucket } = getClient();
+    const url = `${endpoint}/${bucket}/${key}`;
     const response = await aws.fetch(url, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
 
     if (!response.ok) {

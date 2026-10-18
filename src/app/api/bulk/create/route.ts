@@ -5,6 +5,7 @@ import { createAdminClient } from '@/server/supabase/admin';
 import { r2Store } from '@/server/storage/r2';
 import { checkCanBulkConvert } from '@/server/subscriptions/quota';
 
+export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // Allow sufficient time for file uploads
 
 export async function POST(req: Request) {

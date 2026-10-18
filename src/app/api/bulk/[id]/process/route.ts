@@ -11,6 +11,7 @@ import { createZipArchive, FileToZip } from '@/server/bulk/createBatchZip';
 import fs from 'fs';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // 60s max execution for batch chunk
 
 const CHUNK_SIZE = 3; // Traite par salves de 3 fichiers pour rester sous les timeouts
